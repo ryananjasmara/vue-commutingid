@@ -19,35 +19,29 @@ const isHolidaySchedule = ref(false)
 const isDarkMode = ref(false)
 const selectedSchedule = computed(() => {
   if (isHolidaySchedule.value) {
-    return { nextSchedulesLebakBulus: selectedStation.value.scheduleToLebakBulusHoliday, nextSchedulesBundaranHI: selectedStation.value.scheduleToBundaranHIHoliday }
+    return { toLebakBulus: selectedStation.value.scheduleToLebakBulusHoliday, toBundaranHI: selectedStation.value.scheduleToBundaranHIHoliday }
   } else {
-    return { nextSchedulesLebakBulus: selectedStation.value.scheduleToLebakBulus, nextSchedulesBundaranHI: selectedStation.value.scheduleToBundaranHI }
+    return { toLebakBulus: selectedStation.value.scheduleToLebakBulus, toBundaranHI: selectedStation.value.scheduleToBundaranHI }
   }
 })
-const nextSchedulesBundaranHI = computed(() => {
-  const now = new Date()
-  const currentTime = now.getHours() * 60 + now.getMinutes()
+const nextSchedules = computed(() => {
+    if (!selectedSchedule.value) return { toLebakBulus: [], toBundaranHI: [] }
+    const now = new Date()
+    const currentTime = now.getHours() * 60 + now.getMinutes()
 
-  return selectedSchedule.value.nextSchedulesBundaranHI
-    .filter(time => {
-      const [hours, minutes] = time.split(':').map(Number)
-      const scheduleTime = hours * 60 + minutes
-      return scheduleTime > currentTime
-    })
-    .slice(0, 2)
-})
-const nextSchedulesLebakBulus = computed(() => {
-  const now = new Date()
-  const currentTime = now.getHours() * 60 + now.getMinutes()
+    const filterSchedule = (schedule: string[]) =>
+      schedule
+        .filter(time => {
+          const [hours, minutes] = time.split(':').map(Number)
+          return hours * 60 + minutes > currentTime
+        })
+        .slice(0, 2)
 
-  return selectedSchedule.value.nextSchedulesLebakBulus
-    .filter(time => {
-      const [hours, minutes] = time.split(':').map(Number)
-      const scheduleTime = hours * 60 + minutes
-      return scheduleTime > currentTime
-    })
-    .slice(0, 2)
-})
+    return {
+      toLebakBulus: filterSchedule(selectedSchedule.value.toLebakBulus),
+      toBundaranHI: filterSchedule(selectedSchedule.value.toBundaranHI)
+    }
+  })
 const { t, locale } = useI18n()
 
 onMounted(async () => {
@@ -186,8 +180,8 @@ function deg2rad(deg: number) {
                 <span class="text-md font-semibold text-gray-700 dark:text-gray-300">{{ t('towardsHI') }}</span>
               </div>
               <div class="bg-gray-50 dark:bg-gray-700 rounded-md p-3">
-                <div v-if="nextSchedulesBundaranHI.length > 0">
-                  <div v-for="(time, index) in nextSchedulesBundaranHI" :key="index"
+                <div v-if="nextSchedules.toBundaranHI.length > 0">
+                  <div v-for="(time, index) in nextSchedules.toBundaranHI" :key="index"
                     class="flex justify-between items-center">
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ time }}</span>
                     <span class="text-sm text-gray-500 dark:text-gray-400">{{ calculateMinutesLeft(time) }} {{
@@ -209,8 +203,8 @@ function deg2rad(deg: number) {
                 <span class="text-md font-semibold text-gray-700 dark:text-gray-300">{{ t('towardsLB') }}</span>
               </div>
               <div class="bg-gray-50 dark:bg-gray-700 rounded-md p-3">
-                <div v-if="nextSchedulesLebakBulus.length > 0">
-                  <div v-for="(time, index) in nextSchedulesLebakBulus" :key="index"
+                <div v-if="nextSchedules.toLebakBulus.length > 0">
+                  <div v-for="(time, index) in nextSchedules.toLebakBulus" :key="index"
                     class="flex justify-between items-center">
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ time }}</span>
                     <span class="text-sm text-gray-500 dark:text-gray-400">{{ calculateMinutesLeft(time) }} min</span>
