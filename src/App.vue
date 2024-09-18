@@ -67,7 +67,9 @@ onMounted(async () => {
   try {
     const response = await fetch('/stations.json')
     stations.value = await response.json()
-    selectedStation.value = stations.value[0]
+    if (stations.value.length > 0) {
+      selectedStation.value = stations.value[0]
+    }
   } catch (error) {
     console.error('Error loading stations data:', error)
   }
@@ -161,18 +163,11 @@ function deg2rad(deg: number) {
         <div class="p-4 border-b border-gray-200 dark:border-gray-700">
           <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('selectStation') }}</h2>
           <div class="mt-2 relative">
-            <select v-model="selectedStation"
-              class="w-full border-gray-500 dark:border-gray-600 rounded-md shadow-sm pl-3 pr-12 py-2 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
-              <option v-for="station in stations" :key="station.id" :value="station">
+            <Select v-model="selectedStation" :options="stations">
+              <option v-for="station in stations" :key="station.id" :value="station.id">
                 {{ station.name }}
               </option>
-            </select>
-            <div
-              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700 dark:text-gray-300">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-              </svg>
-            </div>
+            </Select>
           </div>
         </div>
         <div class="p-4">
@@ -237,10 +232,7 @@ function deg2rad(deg: number) {
           </div>
         </div>
       </div>
-      <button @click="findNearestStation"
-        class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
-        {{ t('nearestStation') }}
-      </button>
+      <Button @click="findNearestStation">{{ t('nearestStation') }}</Button>
     </div>
     <div class="text-center mt-8">
       <p class="text-sm text-gray-500 dark:text-gray-400">
