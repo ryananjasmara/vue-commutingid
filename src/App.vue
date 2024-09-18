@@ -13,16 +13,8 @@ interface Station {
   scheduleToBundaranHI: string[];
 }
 
-interface SelectedStation {
-  name: string;
-  scheduleToLebakBulusHoliday: string[];
-  scheduleToBundaranHIHoliday: string[];
-  scheduleToLebakBulus: string[];
-  scheduleToBundaranHI: string[];
-}
-
 const stations = ref<Station[]>([])
-const selectedStation = ref<SelectedStation>({ name: '', scheduleToLebakBulusHoliday: [], scheduleToBundaranHIHoliday: [], scheduleToLebakBulus: [], scheduleToBundaranHI: [] })
+const selectedStation = ref<Station>({ id: 0, name: '', latitude: '', longitude: '', scheduleToLebakBulusHoliday: [], scheduleToBundaranHIHoliday: [], scheduleToLebakBulus: [], scheduleToBundaranHI: [] })
 const isHolidaySchedule = ref(false)
 const isDarkMode = ref(false)
 const selectedSchedule = computed(() => {
@@ -185,7 +177,7 @@ function deg2rad(deg: number) {
             </div>
           </div>
           <div class="space-y-4">
-            <div>
+            <div v-if="stations.indexOf(selectedStation) !== stations.length - 1">
               <div class="flex items-center space-x-2 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
@@ -207,7 +199,7 @@ function deg2rad(deg: number) {
                 </div>
               </div>
             </div>
-            <div>
+            <div v-if="stations.indexOf(selectedStation) !== 0">
               <div class="flex items-center space-x-2 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
