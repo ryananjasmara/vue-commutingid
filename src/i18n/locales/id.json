@@ -1,0 +1,11 @@
+{
+  "title": "Jadwal MRT",
+  "selectStation": "Pilih Stasiun",
+  "towardsHI": "Menuju Bundaran HI",
+  "towardsLB": "Menuju Lebak Bulus Grab",
+  "nearestStation": "Pilih Stasiun Terdekat",
+  "noSchedule": "Tidak Ada Jadwal",
+  "minutes": "menit",
+  "weekday": "Hari Biasa",
+  "holiday": "Hari Libur"
+}

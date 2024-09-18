@@ -1,0 +1,11 @@
+{
+  "title": "MRT Schedule",
+  "selectStation": "Select Station",
+  "towardsHI": "Towards Bundaran HI",
+  "towardsLB": "Towards Lebak Bulus Grab",
+  "nearestStation": "Select Nearest Station",
+  "noSchedule": "No Schedule",
+  "minutes": "min",
+  "weekday": "Weekday",
+  "holiday": "Holiday"
+}
